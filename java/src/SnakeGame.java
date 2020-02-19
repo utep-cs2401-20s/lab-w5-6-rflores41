@@ -51,6 +51,6 @@ public class SnakeGame {
 
     private static int getExhaustiveChecks(){   //gets the current state of exhaustiveChecks counter
         return exhaustiveChecks;
-    }//
+    }////
     //test
 }
