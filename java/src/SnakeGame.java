@@ -13,9 +13,20 @@ public class SnakeGame {
 
     //a constructor that takes a 2-dimensional boolean array, and the x and y position of the snakes "head"
     public SnakeGame(boolean [][] board, int x, int y){
-        this.game = board;
+        //made a helper method to copy the board into the array
+        helper(board);
         this.headPosition[0] = x;
         this.headPosition[1] = y;
+    }
+
+    //helper method//////////////////////////////////////////////////////////////////////////////
+    public boolean [][] helper(boolean [][] board){
+        for(int i =0; i<board.length; i++){
+            for(int j = 0; j<board.length; j++){
+                this.game[i][j] = board[i][j];
+            }
+        }
+        return game;
     }
 
     //Methods for functions//////////////////////////////////////////////////////////////////////
@@ -25,32 +36,39 @@ public class SnakeGame {
         int[] tailAndLength = new int[3];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                exhastiveChecks ++;                  //increment exhaustiveChecks
+                exhaustiveChecks++;                  //increment exhaustiveChecks
                 if (board[i][j] == true) {           //if part of the snake
+                    tailAndLength[2] += 1;           //count every part of the snake
                     if (i != headPosition[0] && j != headPosition[1]) {         //if not the head
                         FindNeighbors(i, j, board);          //check for neighbors
                         if (neighbors == 1) {                //if only 1 neighbor, mark as tail position
                             tailAndLength[0] = i;
                             tailAndLength[1] = j;
-                        }else if(neighbors >=2){
-                            
                         }
                     }
-                    //2 or more neighbors, move to next cell
-                    //count every piece of the snake
-                    //return tail(x,y)
                 }
             }
         }return tailAndLength;
     }
 
     public static int FindNeighbors(int i, int j, boolean[][] board){   //method to find neighbors of the current snake piece
-
+        int neighbors = 0;
+        //else if out of bounds throw exception
+        if(board[i+1][j] == true) neighbors++;
+        if(board[i-1][j] == true) neighbors++;
+        if(board[i][j+1] == true) neighbors++;
+        if(board[i][j-1] == true) neighbors++;
+        if(board[i+1][j+1]== true) neighbors++;
+        if(board[i-1][j-1]== true) neighbors++;
+        if(board[i+1][j-1]== true) neighbors++;
+        if(board[i-1][j+1]== true) neighbors++;
     }
 
 
     public int[] findTailRecursive(){
-
+        resetCounters();
+        int [] recursiveTailAndLength = new int [3];
+        findTailRecursive(headPosition[0], headPosition[1], recursiveTailAndLength);
     }
 
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
@@ -58,16 +76,16 @@ public class SnakeGame {
     }
 
     private void resetCounters(){               //resets exhaustiveChecks and recursiveChecks counter
-        this.exhaustiveChecks = 0;
-        this.recursiveChecks = 0;
+        exhaustiveChecks = 0;
+        recursiveChecks = 0;
     }
 
     //Getters////////////////////////////////////////////////////////////////////////////////////////
-    private static int getRecursiveChecks(){    //gets the current state of the recursiveChecks counter
+    public static int getRecursiveChecks(){    //gets the current state of the recursiveChecks counter
         return recursiveChecks;
     }
 
-    private static int getExhaustiveChecks(){   //gets the current state of exhaustiveChecks counter
+    public static int getExhaustiveChecks(){   //gets the current state of exhaustiveChecks counter
         return exhaustiveChecks;
     }
 }
